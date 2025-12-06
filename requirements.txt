@@ -1,0 +1,8 @@
+torch
+torchvision
+torchaudio
+gradio
+tqdm
+numpy
+pillow
+einops

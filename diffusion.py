@@ -64,7 +64,13 @@ class GaussianDiffusion(nn.Module):
 # ================================================
     # DAY 1 – THE REAL TRAINING STARTS HERE
     # You are typing every line below yourself
+    
     # ================================================
+
+    #THE FORWARD PROCESS
+    #NOTE: p_losses the ONLY function that actually trains the diffusion model — it takes a clean image, 
+    # adds noise at a random timestep, asks the neural network “what noise did I just add?”, 
+    # and punishes it with MSE loss for being wrong.
 
     def p_losses(self, x_start: torch.Tensor, t: torch.Tensor, noise: Optional[torch.Tensor] = None):
         #The simplified training objective from the paper (Equation 12)
@@ -84,8 +90,12 @@ class GaussianDiffusion(nn.Module):
             return loss
     
     # -----------------------------
-    # One reverse process step (sampling)
+    # One REVERSE process step (sampling)
     # -----------------------------
+
+     #NOTE:
+     #This function takes a super-noisy image at timestep t and asks the model: “What was the image like one tiny step ago?” — then removes one tiny bit of noise.
+     #That line is literally how Stable Diffusion turns pure static into a perfect face, one step at a time.
 
     @torch.no_grad()
     def p_sample(self, x: torch.Tensor, t: int, t_index: int):
@@ -95,6 +105,10 @@ class GaussianDiffusion(nn.Module):
         sqrt_recip_alphas_t = torch.sqrt(1.0 / self.alphas[t])
 
         #Equation 11 from the paper - the mean of the Reverse Step
+        #This code takes a noisy image (x) at timestep t, asks the model “what noise did I add?”, 
+        # then removes one tiny step of noise to get a slightly cleaner image — repeat 1000 times 
+        # and you get a brand-new face.
+
         predicted_noise = self.model(x, t)
         mean = sqrt_recip_alphas_t * (
             x - betas_t / sqrt_one_minus_alphas_cumprod_t * predicted_noise
@@ -106,6 +120,10 @@ class GaussianDiffusion(nn.Module):
             posterior_variance_t = self.posterior_variance[t, None, None, None]
             noise = torch.randn_like(x)
             return mean + torch.sqrt(posterior_variance_t) * noise
+        
+       #NOTE:
+      # p_sample_loop is the magic loop that turns pure random static into a beautiful new face by calling p_sample 
+      #(remove one tiny step of noise) 1000 times — starting from total garbage and ending with a real-looking image.
         
         @torch.no_grad()
         def p_sample_loop(self, shape):

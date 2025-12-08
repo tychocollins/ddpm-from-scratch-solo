@@ -19,6 +19,10 @@ class DummyModel(torch.nn.Module):
 # ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
 # THESE 4 LINES MUST BE OUTSIDE / UNINDENTED FROM THE CLASS!
 # ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+
+#NOTE: “This loop grabs real digits, randomly noises them, asks our dummy model to guess the noise, 
+# and prints how wrong it was — proving the entire DDPM pipeline works.”
+
 model = DummyModel()
 diffusion = GaussianDiffusion(model, timesteps=1000)
 diffusion.to('mps')                     # remove this line if not on Mac

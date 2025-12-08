@@ -16,10 +16,12 @@ class GaussianDiffusion(nn.Module):
 
     def __init__(
         self,
+        model,
         timesteps: int = 1000,
         schedule: str = "linear",           # "linear" or "cosine"
     ):
         super().__init__()
+        self.model = model
         self.timesteps = timesteps
 
         if schedule == "linear":
@@ -57,3 +59,68 @@ class GaussianDiffusion(nn.Module):
             self.sqrt_alphas_cumprod[t, None, None, None] * x_start +
             self.sqrt_one_minus_alphas_cumprod[t, None, None, None] * noise
         )
+
+
+# ================================================
+    # DAY 1 – THE REAL TRAINING STARTS HERE
+    # You are typing every line below yourself
+    # ================================================
+
+    def p_losses(self, x_start: torch.Tensor, t: torch.Tensor, noise: Optional[torch.Tensor] = None):
+        #The simplified training objective from the paper (Equation 12)
+        #This is literally the ONLY loss we use — everything else is just setup
+        
+        if noise is None:
+            noise = torch.randn_like(x_start)
+
+            # Add noise according to q(x_t | x_0) — this is the forward process
+            x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
+
+            # Model that predicts the noise that was added
+            predicted_noise = self.model(x_noisy,  t)
+
+            #MSE between real noise and predicted noise - this trains the model
+            loss = F.mse_loss(predicted_noise, noise)
+            return loss
+    
+    # -----------------------------
+    # One reverse process step (sampling)
+    # -----------------------------
+
+    @torch.no_grad()
+    def p_sample(self, x: torch.Tensor, t: int, t_index: int):
+        """ Take one step from x_t to x_{t-1}"""
+        betas_t = self.betas[t, None, None, None]
+        sqrt_one_minus_alphas_cumprod_t = self.sqrt_one_minus_alphas_cumprod[t, None, None, None]
+        sqrt_recip_alphas_t = torch.sqrt(1.0 / self.alphas[t])
+
+        #Equation 11 from the paper - the mean of the Reverse Step
+        predicted_noise = self.model(x, t)
+        mean = sqrt_recip_alphas_t * (
+            x - betas_t / sqrt_one_minus_alphas_cumprod_t * predicted_noise
+        )
+
+        if t_index == 0:
+            return mean
+        else:
+            posterior_variance_t = self.posterior_variance[t, None, None, None]
+            noise = torch.randn_like(x)
+            return mean + torch.sqrt(posterior_variance_t) * noise
+        
+        @torch.no_grad()
+        def p_sample_loop(self, shape):
+            """ Full sampling loop - start from pure noise (x_T) 
+            to final image (x_0)"""
+            device = self.betas.device
+            b = shape[0]
+            img = torch.randn(shape, device=device)
+            for i in reversed(range(0, self.timesteps)):
+                t = torch.full((b,), i, device=device, dtype=torch.long)
+                img = self.p_sample(img, t, i)
+                return img
+
+    @torch.no_grad()
+    def sample(self, batch_size=16, img_size=64):
+         #Easy Public function to generate images
+            return self.p_sample_loop(shape=(batch_size, 3, img_size, img_size))
+

@@ -12,7 +12,7 @@ def get_mnist_loader(batch_size=128):
         transforms.Normalize((0.5,), (0.5,))
     ])
     dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
-    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
 
 def get_cifar10_loader(batch_size=128):
     transform = transforms.Compose([
@@ -21,7 +21,7 @@ def get_cifar10_loader(batch_size=128):
         transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
     ])
     dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
 
 class CelebA64(torch.utils.data.Dataset):
     def __init__(self, root="./data/celeba"):
@@ -40,4 +40,4 @@ class CelebA64(torch.utils.data.Dataset):
 
 def get_celeba64_loader(batch_size=64):
     dataset = CelebA64()
-    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)

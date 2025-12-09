@@ -15,7 +15,7 @@ I will be learning how to compile DDPM from scratch
 Daily commits. 
 When I’m done, I’ll be able to whiteboard every equation and run live generation.
 
-**Day 1 — Monday Dec 9**  
+## Day 1 — Monday Dec 9   
 - Typed full `diffusion.py` + `train_mnist.py` myself in **under 2 hours**  
 - Fixed every bug, got real loss printing (~2.0)  
 - **DDPM is ALIVE** — training loop 100% working on Mac MPS  

@@ -22,4 +22,11 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Finally understood: we ONLY train the model to predict the noise we added  
 - Commit: https://github.com/tychocollins/ddpm-from-scratch-solo/commit/...
 
-Tomorrow: replace DummyModel with real U-Net → loss drops → actual digits appear
+## Day 2 — Tuesday Dec 10, 2025
+
+**Replaced DummyModel with a real U-Net**
+
+- Built full encoder-decoder U-Net with skip connections and DoubleConv blocks  
+- Switched from dummy random noise model to actual convolutional architecture  
+- Loss dropped from ~2.0 (random guessing) to **1.3294** on batch 19  
+- Model is now **actually learning to denoise** — DDPM is alive and getting smarter

@@ -38,8 +38,7 @@ for batch_idx, (x, _) in enumerate(loader):
 
     print(f"Batch {batch_idx:2d} → loss: {loss.item():.4f}")
 
-    if batch_idx == 19:
-        break
+   
 
 print("-" * 50)
 # You need to run this loop for many epochs to see meaningful results, 

@@ -30,3 +30,12 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Switched from dummy random noise model to actual convolutional architecture  
 - Loss dropped from ~2.0 (random guessing) to **1.3294** on batch 19  
 - Model is now **actually learning to denoise** — DDPM is alive and getting smarter
+
+## Day 3 — Wednesday Dec 11, 2025
+
+**Added time embeddings + posterior variance — my DDPM is now a real diffusion model**
+
+- Implemented sinusoidal time embeddings (exact method used by Stable Diffusion)  
+- Added posterior variance for correct reverse process sampling  
+- Model now knows exactly “how noisy” the image is at each step  
+- Loss dropped from ~1.33 → **0.25** (insane for Day 3)

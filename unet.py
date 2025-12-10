@@ -1,61 +1,106 @@
-# unet.py — FINAL WORKING VERSION FOR MNIST (28×28)
+# unet.py — FIXED VERSION with Time Conditioning
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 
-class DoubleConv(nn.Module):
-    def __init__(self, in_channels, out_channels):
+# --- NEW COMPONENT: AdaGroupNorm ---
+class AdaGroupNorm(nn.Module):
+    """
+    Adaptive Group Normalization to condition the features on the time embedding.
+    """
+    def __init__(self, channels, time_embed_dim=128, num_groups=32):
         super().__init__()
-        self.double_conv = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, bias=False),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1, bias=False),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True)
+        self.norm = nn.GroupNorm(num_groups, channels, affine=False)
+        # Two linear layers to project time embedding into scale (gamma) and shift (beta)
+        self.projection = nn.Sequential(
+            nn.SiLU(),
+            nn.Linear(time_embed_dim, 2 * channels)
         )
 
-    def forward(self, x):
-        return self.double_conv(x)
+    def forward(self, x, time_emb):
+        # Normalize the input features
+        x = self.norm(x)
+        
+        # Project time embedding to gamma and beta
+        gamma_beta = self.projection(time_emb)
+        # Split into scale (gamma) and shift (beta)
+        gamma, beta = torch.chunk(gamma_beta, 2, dim=1)
+        
+        # Reshape for broadcasting: (B, C) -> (B, C, 1, 1)
+        gamma = gamma.view(gamma.shape[0], gamma.shape[1], 1, 1)
+        beta = beta.view(beta.shape[0], beta.shape[1], 1, 1)
+        
+        # Apply modulation: gamma * x + beta
+        return x * (1 + gamma) + beta
 
 
-class UNet(nn.Module):
-    def __init__(self, in_channels=1, out_channels=1):
+# --- MODIFIED BLOCK: ConditionalDoubleConv ---
+class ConditionalConvBlock(nn.Module):
+    def __init__(self, in_channels, out_channels, time_embed_dim=128):
         super().__init__()
+        
+        # Layer 1
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1)
+        self.norm1 = AdaGroupNorm(out_channels, time_embed_dim)
+        self.relu1 = nn.ReLU(inplace=True)
+        
+        # Layer 2
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1)
+        self.norm2 = AdaGroupNorm(out_channels, time_embed_dim)
+        self.relu2 = nn.ReLU(inplace=True)
 
-        # Encoder
-        self.down1 = DoubleConv(in_channels, 64)
-        self.down2 = DoubleConv(64, 128)
+    def forward(self, x, time_emb):
+        # Conv 1
+        x = self.conv1(x)
+        x = self.norm1(x, time_emb)
+        x = self.relu1(x)
+        
+        # Conv 2
+        x = self.conv2(x)
+        x = self.norm2(x, time_emb)
+        x = self.relu2(x)
+        return x
+
+
+# --- MODIFIED UNet ---
+class UNet(nn.Module):
+    def __init__(self, in_channels=1, out_channels=1, time_embed_dim=128):
+        super().__init__()
+        self.time_embed_dim = time_embed_dim
+
+        # Encoder - Now uses ConditionalConvBlock
+        self.down1 = ConditionalConvBlock(in_channels, 64, time_embed_dim)
+        self.down2 = ConditionalConvBlock(64, 128, time_embed_dim)
         self.pool = nn.MaxPool2d(2)
 
         # Bottleneck
-        self.bottleneck = DoubleConv(128, 256)
+        self.bottleneck = ConditionalConvBlock(128, 256, time_embed_dim)
 
         # Decoder
         self.up1 = nn.ConvTranspose2d(256, 128, kernel_size=2, stride=2)
-        self.conv1 = DoubleConv(256, 128)   # 128 (up) + 128 (skip)
+        self.conv1 = ConditionalConvBlock(256, 128, time_embed_dim)   # 128 (up) + 128 (skip)
 
         self.up2 = nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2)
-        self.conv2 = DoubleConv(128, 64)    # 64 + 64
+        self.conv2 = ConditionalConvBlock(128, 64, time_embed_dim)    # 64 + 64
 
         self.final = nn.Conv2d(64, out_channels, kernel_size=1)
 
-    def forward(self, x, t=None):
+    def forward(self, x, time_emb): # <--- UPDATED SIGNATURE: Accepts time_emb
         # Encoder
-        d1 = self.down1(x)          # 28×28 → 28×28
-        d2 = self.down2(self.pool(d1))  # 14×14
+        d1 = self.down1(x, time_emb)
+        d2 = self.down2(self.pool(d1), time_emb)
 
         # Bottleneck
-        b = self.bottleneck(self.pool(d2))  # 7×7
+        b = self.bottleneck(self.pool(d2), time_emb)
 
         # Decoder
-        u1 = self.up1(b)                     # 7×7 → 14×14
-        u1 = torch.cat([u1, d2], dim=1)      # skip connection
-        u1 = self.conv1(u1)                  # 14×14
+        u1 = self.up1(b)
+        u1 = torch.cat([u1, d2], dim=1)
+        u1 = self.conv1(u1, time_emb)
 
-        u2 = self.up2(u1)                    # 14×14 → 28×28
-        u2 = torch.cat([u2, d1], dim=1)      # skip connection
-        u2 = self.conv2(u2)                  # 28×28
+        u2 = self.up2(u1)
+        u2 = torch.cat([u2, d1], dim=1)
+        u2 = self.conv2(u2, time_emb)
 
-        return self.final(u2)                # 28×28 × 1
+        return self.final(u2)

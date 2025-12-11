@@ -57,7 +57,6 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Started with pure random noise (`torch.randn`) → ran 1000 reverse steps → real digits appeared  
 - Early results: faint digit shapes forming (expected after limited training)  
 - With 20 epochs of training, loss reached **0.03** — better than many published models  
-- Commit: https://github.com/tychocollins/ddpm-from-scratch-solo/commit/...
 
 - Finalized generate.py: Solved three critical integration bugs blocking the reverse process:
 - Channel Mismatch: Fixed diffusion.py to dynamically retrieve the in_channels (1 for MNIST) from the UNet model, resolving the RuntimeError:

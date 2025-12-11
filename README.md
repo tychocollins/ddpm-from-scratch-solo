@@ -60,7 +60,9 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Commit: https://github.com/tychocollins/ddpm-from-scratch-solo/commit/...
 
 - Finalized generate.py: Solved three critical integration bugs blocking the reverse process:
--Channel Mismatch: Fixed diffusion.py to dynamically retrieve the in_channels (1 for MNIST) from the UNet model, resolving the RuntimeError: expected 1 channels, but got 3.
--Time Embedding Access: Corrected the path to the time embedding MLP in diffusion.py from the non-existent self.model.time_mlp to the correct self.time_mlp.
-Method Location: Implemented the static _sinusoidal_embedding method inside unet.py to be called correctly by diffusion.py.
+- Channel Mismatch: Fixed diffusion.py to dynamically retrieve the in_channels (1 for MNIST) from the UNet model, resolving the RuntimeError:
+expected 1 channels, but got 3.
+- Time Embedding Access: Corrected the path to the time embedding MLP in diffusion.py from the non-existent
+self.model.time_mlp to the correct self.time_mlp.
+- Method Location: Implemented the static _sinusoidal_embedding method inside unet.py to be called correctly by diffusion.py.
 Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating the trained_mnist_weights.pt file needed for generation.

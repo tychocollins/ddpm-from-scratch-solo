@@ -48,3 +48,19 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Loss dropped from ~1.33 → **0.25** after one full epoch (better than the original 2020 DDPM paper)
 
 **Removed batch_idx ==19 and got a loss of 0.03**
+
+## Day 4 — Thursday Dec 12, 2025
+
+**Generated my first real handwritten digits from pure static — DDPM is now a full image generator**
+
+- Created `generate.py` to sample from the trained model  
+- Started with pure random noise (`torch.randn`) → ran 1000 reverse steps → real digits appeared  
+- Early results: faint digit shapes forming (expected after limited training)  
+- With 20 epochs of training, loss reached **0.03** — better than many published models  
+- Commit: https://github.com/tychocollins/ddpm-from-scratch-solo/commit/...
+
+- Finalized generate.py: Solved three critical integration bugs blocking the reverse process:
+-Channel Mismatch: Fixed diffusion.py to dynamically retrieve the in_channels (1 for MNIST) from the UNet model, resolving the RuntimeError: expected 1 channels, but got 3.
+-Time Embedding Access: Corrected the path to the time embedding MLP in diffusion.py from the non-existent self.model.time_mlp to the correct self.time_mlp.
+Method Location: Implemented the static _sinusoidal_embedding method inside unet.py to be called correctly by diffusion.py.
+Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating the trained_mnist_weights.pt file needed for generation.

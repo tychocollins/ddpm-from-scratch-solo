@@ -20,7 +20,6 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Fixed every bug, got real loss printing (~2.0)  
 - **DDPM is ALIVE** — training loop 100% working on Mac MPS  
 - Finally understood: we ONLY train the model to predict the noise we added  
-- Commit: https://github.com/tychocollins/ddpm-from-scratch-solo/commit/...
 
 ## Day 2 — Tuesday Dec 10, 2025
 

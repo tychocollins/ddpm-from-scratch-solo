@@ -1,10 +1,10 @@
-# unet.py — FIXED VERSION with Time Conditioning
+# unet.py — FINAL WORKING VERSION
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import math
 
-
-# --- NEW COMPONENT: AdaGroupNorm ---
+# --- NEW COMPONENT: AdaGroupNorm (Adaptive Group Normalization) ---
 class AdaGroupNorm(nn.Module):
     """
     Adaptive Group Normalization to condition the features on the time embedding.
@@ -24,7 +24,6 @@ class AdaGroupNorm(nn.Module):
         
         # Project time embedding to gamma and beta
         gamma_beta = self.projection(time_emb)
-        # Split into scale (gamma) and shift (beta)
         gamma, beta = torch.chunk(gamma_beta, 2, dim=1)
         
         # Reshape for broadcasting: (B, C) -> (B, C, 1, 1)
@@ -35,7 +34,7 @@ class AdaGroupNorm(nn.Module):
         return x * (1 + gamma) + beta
 
 
-# --- MODIFIED BLOCK: ConditionalDoubleConv ---
+# --- MODIFIED BLOCK: ConditionalConvBlock ---
 class ConditionalConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, time_embed_dim=128):
         super().__init__()
@@ -67,6 +66,7 @@ class ConditionalConvBlock(nn.Module):
 class UNet(nn.Module):
     def __init__(self, in_channels=1, out_channels=1, time_embed_dim=128):
         super().__init__()
+        self.in_channels = in_channels # <-- CRITICAL: Saves channel count for diffusion.py
         self.time_embed_dim = time_embed_dim
 
         # Encoder - Now uses ConditionalConvBlock
@@ -77,7 +77,7 @@ class UNet(nn.Module):
         # Bottleneck
         self.bottleneck = ConditionalConvBlock(128, 256, time_embed_dim)
 
-        # Decoder
+        # Decoder (using ConvTranspose2d for upsampling)
         self.up1 = nn.ConvTranspose2d(256, 128, kernel_size=2, stride=2)
         self.conv1 = ConditionalConvBlock(256, 128, time_embed_dim)   # 128 (up) + 128 (skip)
 
@@ -85,6 +85,30 @@ class UNet(nn.Module):
         self.conv2 = ConditionalConvBlock(128, 64, time_embed_dim)    # 64 + 64
 
         self.final = nn.Conv2d(64, out_channels, kernel_size=1)
+
+    # *** FIX: ADDED SINUSOIDAL EMBEDDING METHOD ***
+    @staticmethod
+    def _sinusoidal_embedding(timesteps, embedding_dim):
+        """
+        Calculates the sinusoidal positional encoding for timesteps.
+        (This method is called by diffusion.py's p_losses and p_sample)
+        """
+        device = timesteps.device
+        
+        half_dim = embedding_dim // 2
+        
+        # Calculate frequency terms
+        emb = math.log(10000) / (half_dim - 1)
+        emb = torch.exp(torch.arange(half_dim, dtype=torch.float32, device=device) * -emb)
+        
+        # Calculate arguments (t * freq) and combine sin/cos
+        emb = timesteps[:, None].float() * emb[None, :]
+        emb = torch.cat([torch.sin(emb), torch.cos(emb)], dim=1)
+        
+        # Pad if dimension is odd
+        if embedding_dim % 2 == 1:
+            emb = F.pad(emb, (0, 1))
+        return emb
 
     def forward(self, x, time_emb): # <--- UPDATED SIGNATURE: Accepts time_emb
         # Encoder

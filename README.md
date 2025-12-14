@@ -65,7 +65,8 @@ self.model.time_mlp to the correct self.time_mlp.
 - Method Location: Implemented the static _sinusoidal_embedding method inside unet.py to be called correctly by diffusion.py.
 Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating the trained_mnist_weights.pt file needed for generation.
 
-## DDPM Master Plan: Day 5 ReadmeStatus: Transitioned to CIFAR-10 (Color Generation)
+## Day 5 - Friday Dec 13t, 2025
+**Transitioned to CIFAR-10 (Color Generation)**
 -updated U-Net channels from $1 \rightarrow 3$ to enable processing and generation of color images.Dataset 
 
 -Switch: Transitioned the data pipeline from MNIST ($28 \times 28$, grayscale) to CIFAR-10 ($32 \times 32$, color).

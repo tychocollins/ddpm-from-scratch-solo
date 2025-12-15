@@ -88,6 +88,7 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 - Model is now fully general — works on any image size/channels
 
   🛠️ Architectural Changes (The "How")
+  
 Color Conversion: Switched the U-Net model from 1 channel to 3 input/output channels (in_channels=3, out_channels=3) to handle real-world RGB photos (CIFAR-10).
 
 Performance Fix 1: Cosine Noise Schedule: Implemented the superior Cosine Noise Schedule in diffusion.py. This is essential for effective noise parameterization and significantly improves the quality of the reverse diffusion process.

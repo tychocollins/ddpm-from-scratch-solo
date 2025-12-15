@@ -76,4 +76,4 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 -Architectural Stability: Confirmed core diffusion logic is robust enough to handle the jump in complexity.
 
 ## Day 6 - Saturday Dec 14th, 2025
-**Perfecting MNIST Digits (Already Don)**
+**Perfecting MNIST Digits (Already Done)**

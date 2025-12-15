@@ -21,7 +21,7 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - **DDPM is ALIVE** — training loop 100% working on Mac MPS  
 - Finally understood: we ONLY train the model to predict the noise we added  
 
-## Day 2 — Tuesday Dec 10, 2025
+## Day 2 — Tuesday Dec 9, 2025
 
 **Replaced DummyModel with a real U-Net**
 
@@ -30,7 +30,7 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 - Loss dropped from ~2.0 (random guessing) to **1.3294** on batch 19  
 - Model is now **actually learning to denoise** — DDPM is alive and getting smarter
 
-## Day 3 — Wednesday Dec 11, 2025
+## Day 3 — Wednesday Dec 10, 2025
 
 **Added time embeddings + posterior variance — my DDPM is now a real diffusion model**
 
@@ -48,7 +48,7 @@ When I’m done, I’ll be able to whiteboard every equation and run live genera
 
 **Removed batch_idx ==19 and got a loss of 0.03**
 
-## Day 4 — Thursday Dec 12, 2025
+## Day 4 — Thursday Dec 11, 2025
 
 **Generated my first real handwritten digits from pure static — DDPM is now a full image generator**
 
@@ -65,7 +65,7 @@ self.model.time_mlp to the correct self.time_mlp.
 - Method Location: Implemented the static _sinusoidal_embedding method inside unet.py to be called correctly by diffusion.py.
 Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating the trained_mnist_weights.pt file needed for generation.
 
-## Day 5 - Friday Dec 13th, 2025
+## Day 5 - Friday Dec 12th, 2025
 **Transitioned to CIFAR-10 (Color Generation)**
 -updated U-Net channels from $1 \rightarrow 3$ to enable processing and generation of color images.Dataset 
 
@@ -75,10 +75,10 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 
 -Architectural Stability: Confirmed core diffusion logic is robust enough to handle the jump in complexity.
 
-## Day 6 - Saturday Dec 14th, 2025
+## Day 6 - Saturday Dec 13th, 2025
 **Perfecting MNIST Digits (Already Done)**
 
-## Day 7 — Sunday Dec 15, 2025
+## Day 7 — Monday Dec 15, 2025
 
 **Switched to color images (CIFAR-10) — my DDPM now handles real-world RGB photos**
 
@@ -86,3 +86,21 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 - Switched dataset from MNIST to CIFAR-10 (32×32 cars, dogs, planes, etc.)  
 - Trained for 50 epochs with AdamW optimizer and lower learning rate  
 - Model is now fully general — works on any image size/channels
+
+  🛠️ Architectural Changes (The "How")
+Color Conversion: Switched the U-Net model from 1 channel to 3 input/output channels (in_channels=3, out_channels=3) to handle real-world RGB photos (CIFAR-10).
+
+Performance Fix 1: Cosine Noise Schedule: Implemented the superior Cosine Noise Schedule in diffusion.py. This is essential for effective noise parameterization and significantly improves the quality of the reverse diffusion process.
+
+Performance Fix 2: EMA Integration: Implemented the Exponential Moving Average (EMA) utility in train_cifar.py. The script now saves the stable EMA-averaged weights (trained_cifar_weights_ema.pt), which is critical for clean, artifact-free sampling.
+
+Optimizer Update: Switched to the AdamW optimizer for improved training stability and convergence speed.
+
+📈 Training Status & Next Steps
+Dataset: Switched from MNIST to CIFAR-10 (32x32 color images).
+
+Training Run: Started a long-running, optimized training session (100 epochs) using the Cosine Schedule and EMA.
+
+Model Generality: The core DDPM implementation is now robustly configured for any color/image size, making the model theoretically ready for CelebA.
+
+Next Action: After training, the priority is to implement the FID (Fréchet Inception Distance) metric script to objectively measure the quality of the generated color images against the target score.

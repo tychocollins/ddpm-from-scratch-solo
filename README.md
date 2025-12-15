@@ -97,11 +97,4 @@ Performance Fix 2: EMA Integration: Implemented the Exponential Moving Average (
 
 Optimizer Update: Switched to the AdamW optimizer for improved training stability and convergence speed.
 
-📈 Training Status & Next Steps
-Dataset: Switched from MNIST to CIFAR-10 (32x32 color images).
 
-Training Run: Started a long-running, optimized training session (100 epochs) using the Cosine Schedule and EMA.
-
-Model Generality: The core DDPM implementation is now robustly configured for any color/image size, making the model theoretically ready for CelebA.
-
-Next Action: After training, the priority is to implement the FID (Fréchet Inception Distance) metric script to objectively measure the quality of the generated color images against the target score.

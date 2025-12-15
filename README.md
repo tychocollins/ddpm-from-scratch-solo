@@ -77,3 +77,12 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 
 ## Day 6 - Saturday Dec 14th, 2025
 **Perfecting MNIST Digits (Already Done)**
+
+## Day 7 — Sunday Dec 15, 2025
+
+**Switched to color images (CIFAR-10) — my DDPM now handles real-world RGB photos**
+
+- Updated U-Net to 3 input/output channels for RGB color  
+- Switched dataset from MNIST to CIFAR-10 (32×32 cars, dogs, planes, etc.)  
+- Trained for 50 epochs with AdamW optimizer and lower learning rate  
+- Model is now fully general — works on any image size/channels

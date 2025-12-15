@@ -24,6 +24,26 @@ def extract(a: torch.Tensor, t: torch.Tensor, x_shape: torch.Size) -> torch.Tens
     return out.reshape(b, *((1,) * (len(x_shape) - 1)))
 
 
+#BETA SCHEDULE
+
+def cosine_beta_schedule(timesteps, s=0.008):
+    """
+    cosine schedule as proposed in paper: 'Improved Denoising Diffusion Probabilistic Models'
+    s is a small offset to prevent beta_t from being too close to 1 at t=0.
+    """
+    # Create a tensor for the timesteps
+    steps = timesteps + 1
+    x = torch.linspace(0, timesteps, steps)
+    
+    # Calculate the alpha_cumprod values using the cosine function
+    alphas_cumprod = torch.cos(((x / timesteps) + s) / (1 + s) * math.pi * 0.5) ** 2
+    alphas_cumprod = alphas_cumprod / alphas_cumprod[0]
+    
+    # Calculate betas from the ratio of consecutive alphas_cumprod
+    betas = 1 - (alphas_cumprod[1:] / alphas_cumprod[:-1])
+    
+    # Clip betas to ensure stability (preventing very small/large values)
+    return torch.clip(betas, 0.0001, 0.999)
 # --- Main Diffusion Class ---
 
 class GaussianDiffusion(nn.Module):
@@ -40,8 +60,8 @@ class GaussianDiffusion(nn.Module):
             nn.Linear(self.time_emb_dim * 4, self.time_emb_dim)
         )
 
-        # Linear beta schedule
-        betas = torch.linspace(1e-4, 0.02, timesteps)
+        # Cosine beta schedule (CRITICAL CHANGE)
+        betas = cosine_beta_schedule(timesteps)
         alphas = 1.0 - betas
         alphas_cumprod = alphas.cumprod(dim=0)
         alphas_cumprod_prev = F.pad(alphas_cumprod[:-1], (1, 0), value=1.0)
@@ -66,6 +86,14 @@ class GaussianDiffusion(nn.Module):
 
         return sqrt_alpha_t * x_start + sqrt_one_minus_alpha_t * noise
 
+# ================================================
+    # DAY 1 – THE REAL TRAINING STARTS HERE  
+    # ================================================
+
+    #THE FORWARD PROCESS
+    #NOTE: p_losses the ONLY function that actually trains the diffusion model — it takes a clean image, 
+    # adds noise at a random timestep, asks the neural network “what noise did I just add?”, 
+    # and punishes it with MSE loss for being wrong.
 
     def p_losses(self, x_start, t, noise=None):
         if noise is None:
@@ -82,9 +110,13 @@ class GaussianDiffusion(nn.Module):
         return F.mse_loss(predicted_noise, noise)
 
 
-    # -----------------------------
+   # -----------------------------
     # One REVERSE process step (sampling)
     # -----------------------------
+
+     #NOTE:
+     #This function takes a super-noisy image at timestep t and asks the model: “What was the image like one tiny step ago?” — then removes one tiny bit of noise.
+     #That line is literally how Stable Diffusion turns pure static into a perfect face, one step at a time.
 
     @torch.no_grad()
     def p_sample(self, x, t, t_index):
@@ -113,6 +145,12 @@ class GaussianDiffusion(nn.Module):
             return mean + torch.sqrt(variance) * noise
 
     @torch.no_grad()
+
+
+ #NOTE:
+      # p_sample_loop is the magic loop that turns pure random static into a beautiful new face by calling p_sample 
+      #(remove one tiny step of noise) 1000 times — starting from total garbage and ending with a real-looking image.
+    
     def p_sample_loop(self, shape):
         device = self.betas.device
         b = shape[0]

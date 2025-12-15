@@ -9,11 +9,11 @@ import os
 # You need to specify the path where your trained model weights are saved.
 CHECKPOINT_PATH = "trained_mnist_weights.pt"
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
-IMG_SIZE = 28
+IMG_SIZE = 32
 BATCH_SIZE = 16
 
 # Load the model structure (MNIST: 1 channel in/out)
-model = UNet(in_channels=1, out_channels=1)
+model = UNet(in_channels=3, out_channels=3)
 # Initialize the diffusion object with the model
 diffusion = GaussianDiffusion(model, timesteps=1000)
 
@@ -52,7 +52,7 @@ samples = samples.clamp(0, 1)
 fig, axes = plt.subplots(4, 4, figsize=(8, 8))
 for i in range(BATCH_SIZE):
     ax = axes[i // 4, i % 4]
-    ax.imshow(samples[i].squeeze(0), cmap="gray")
+    ax.imshow(samples[i].permute(1, 2, 0))
     ax.axis("off")
 
 plt.tight_layout()

@@ -97,4 +97,23 @@ Performance Fix 2: EMA Integration: Implemented the Exponential Moving Average (
 
 Optimizer Update: Switched to the AdamW optimizer for improved training stability and convergence speed.
 
+## Day 8 — Thursday Dec 12, 2025
+
+**Generated my first real color images from pure static — DDPM now handles RGB photos**
+
+- Created `generate_cifar.py` to sample from the trained color model  
+- Started with pure random noise (`torch.randn`) → ran 1000 reverse steps → real cars, dogs, planes appeared  
+- Trained on CIFAR-10 (32×32 color) → loss reached **0.03** after 20 epochs  
+- Results: clear color images forming (perfect for this stage)
+
+
+## Day 9 — Wednesday Dec 18, 2025
+
+**Switched to 64×64 human faces (CelebA-HQ) — my DDPM now trains on real-world faces**
+
+-created 'train_celeba.py' 
+- Updated dataset to 64×64 aligned celebrity faces (CelebA-HQ)  
+- Trained for 50 epochs with AdamW optimizer and EMA (exponential moving average)  
+- Added professional-grade tricks: EMA shadow model + checkpoint saving  
+- Model is now ready for high-quality face generation
 

@@ -1,6 +1,47 @@
-__pycache__/
-*.pyc
+# --- DATA & DATASETS ---
+# Never push raw images or large zip files
 data/
-*.pth
+celeba/
+img_align_celeba/
+*.zip
+*.tar.gz
+*.csv
+
+# --- MODEL WEIGHTS & CHECKPOINTS ---
+# These are too large for GitHub (usually 50MB+)
 *.pt
-.ipynb_checkpoints
+*.pth
+*.ckpt
+*.bin
+checkpoint/
+
+# --- PYTHON & ENVIRONMENTS ---
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+env/
+pytorch_env/
+
+# --- OUTPUTS & LOGS ---
+# Ignore generated images and TensorBoard logs
+results/
+samples/
+runs/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.log
+
+# --- OPERATING SYSTEM ---
+# MacOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- IDEs ---
+.vscode/
+.idea/
+.ipynb_checkpoints/

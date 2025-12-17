@@ -1,26 +1,27 @@
 # train_mnist.py — FULL VERSION WITH EPOCHS AND SAVING
 from diffusion import GaussianDiffusion
 from datasets import get_mnist_loader
+from datasets import get_cifar10_loader
 from unet import UNet
 import torch
 import os # Import the os library for path handling
 
 # --- CONFIGURATION ---
-NUM_EPOCHS = 20 # Set this higher (e.g., 50-100) for good results
+NUM_EPOCHS = 50 # Set this higher (e.g., 50-100) for good results
 SAVE_PATH = "trained_mnist_weights.pt" # File name for generate.py
 DEVICE = 'mps'
 
 # Real U-Net
-model = UNet(in_channels=1, out_channels=1)
+model = UNet(in_channels=3, out_channels=3)
 diffusion = GaussianDiffusion(model, timesteps=1000)
 diffusion.to(DEVICE)  
 
-loader = get_mnist_loader(batch_size=128)
+loader = get_cifar10_loader(batch_size=64)
 diffusion.train()
-optimizer = torch.optim.Adam(diffusion.parameters(), lr=1e-4) 
+optimizer = torch.optim.Adam(diffusion.parameters(), lr=2e-4) 
 
-print(f"Starting Training for {NUM_EPOCHS} Epochs on {DEVICE}...")
-print("-" * 50)
+print(f"Starting Day 5 training — COLOR IMAGES (CIFAR-10) for {NUM_EPOCHS} epochs")
+print("-" * 60)
 
 # --- TRAINING LOOP ---
 for epoch in range(1, NUM_EPOCHS + 1):

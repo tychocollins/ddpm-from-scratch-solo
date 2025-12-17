@@ -1,43 +1,40 @@
-# datasets.py
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from pathlib import Path
 from PIL import Image
-import os
-
-def get_mnist_loader(batch_size=128):
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
-    ])
-    dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
-    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
-
-def get_cifar10_loader(batch_size=128):
-    transform = transforms.Compose([
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
-    ])
-    dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
 
 class CelebA64(torch.utils.data.Dataset):
-    def __init__(self, root="./data/celeba"):
+    def __init__(self):
         self.transform = transforms.Compose([
             transforms.Resize(64),
             transforms.CenterCrop(64),
+            transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
-            transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
-        self.paths = sorted((Path(root) / "img_align_celeba").glob("*.jpg"))[:100000]
+        
+        # Deep search the entire project folder for any jpg/jpeg/png
+        search_path = Path("/Users/tychocollins/Desktop/DDPM Solo")
+        print(f"Deep searching for images in {search_path}...")
+        
+        self.paths = []
+        for ext in ["**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.JPG"]:
+            self.paths.extend(list(search_path.rglob(ext)))
 
-    def __len__(self): return len(self.paths)
+        if len(self.paths) == 0:
+            raise RuntimeError(f"ZERO images found in {search_path}. Ensure your dataset is unzipped!")
+        
+        print(f"🚀 Success! Found {len(self.paths)} images.")
+        self.paths = sorted(self.paths)[:100000]
+
+    def __len__(self):
+        return len(self.paths)
+
     def __getitem__(self, idx):
         img = Image.open(self.paths[idx]).convert("RGB")
-        return self.transform(img)
+        return self.transform(img), 0
 
-def get_celeba64_loader(batch_size=64):
+def get_celeba64_loader(batch_size=16):
     dataset = CelebA64()
-    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=2)

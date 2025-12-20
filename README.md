@@ -97,7 +97,7 @@ Performance Fix 2: EMA Integration: Implemented the Exponential Moving Average (
 
 Optimizer Update: Switched to the AdamW optimizer for improved training stability and convergence speed.
 
-## Day 8 — Thursday Dec 12, 2025
+## Day 8 — Tuesday Dec 16, 2025
 
 **Generated my first real color images from pure static — DDPM now handles RGB photos**
 
@@ -107,7 +107,7 @@ Optimizer Update: Switched to the AdamW optimizer for improved training stabilit
 - Results: clear color images forming (perfect for this stage)
 
 
-## Day 9 — Wednesday Dec 18, 2025
+## Day 9 — Wednesday Dec 17, 2025
 
 **Switched to 64×64 human faces (CelebA-HQ) — my DDPM now trains on real-world faces**
 

@@ -4,6 +4,20 @@ from torchvision import datasets, transforms
 from pathlib import Path
 from PIL import Image
 
+# --- CIFAR-10 Loader (The missing piece!) ---
+def get_cifar10_loader(batch_size=128):
+    # Same normalization as CelebA to keep the UNet happy
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)) # [-1, 1] range
+    ])
+    
+    # This will download the 160MB dataset automatically to a folder named './data'
+    dataset = datasets.CIFAR10(root="./data", train=True, download=True, transform=transform)
+    
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=2)
+
+# --- CelebA Loader (Keep your existing code) ---
 class CelebA64(torch.utils.data.Dataset):
     def __init__(self):
         self.transform = transforms.Compose([
@@ -14,7 +28,6 @@ class CelebA64(torch.utils.data.Dataset):
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
         
-        # Deep search the entire project folder for any jpg/jpeg/png
         search_path = Path("/Users/tychocollins/Desktop/DDPM Solo")
         print(f"Deep searching for images in {search_path}...")
         

@@ -117,3 +117,17 @@ Optimizer Update: Switched to the AdamW optimizer for improved training stabilit
 - Added professional-grade tricks: EMA shadow model + checkpoint saving  
 - Model is now ready for high-quality face generation
 
+  ## Day 10 - Thursday Dec 18, 2025
+
+  -created 'generate_celeb.py'
+  -Started the training processs and experimenting with facial generation.
+  -Hit Nan errors with generation blocks of neon yellow color.
+
+  # Day 11 - Friday Dec 19, 2025
+
+  -Continue to fix errrors and run facial generation again
+  -Replaced AdamW with SGD for generation. Dumbing the generation model down hopefully won't damage the facial generations.
+
+
+  
+

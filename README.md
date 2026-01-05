@@ -19,6 +19,7 @@
 
 
 
+
 ## ⚙️ Technical Specifications
 
 This implementation utilizes a high-performance, custom-built architecture designed for stability at higher resolutions (64x64).

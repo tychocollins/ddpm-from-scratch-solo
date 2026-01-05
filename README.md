@@ -219,4 +219,29 @@ python scripts/downloader.py
 ### Then, start the training loop
 python scripts/train.py
 
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone  [https://github.com/tychocollins/ddpm-from-scratch-solo.git](https://github.com/tychocollins/ddpm-from-scratch-solo.git)
+
+    ```
+
+2.  **Create and activate the environment:**
+    ```bash
+    conda create -n pytorch_env python=3.11
+    conda activate pytorch_env
+    ```
+
+3.  **Install dependencies:**
+    ```bash
+    cd ddpm-from-scratch-solo
+    pip install -r requirements.txt
+    ```
+
+### Run the Interactive App
+
+Launch the Gradio interface to generate faces using the pre-trained Epoch 200 weights:
+python app.py
+
 

@@ -209,13 +209,13 @@ python app.py
 To generate a large batch of images for evaluation, use the specialized script:
 python scripts/generate_bulk.py
 
-4. Training (Optional)
+## 4. Training (Optional)
 If you wish to re-train or fine-tune the model on the CelebA dataset:
 
-# First, download the dataset
+## First, download the dataset
 python scripts/downloader.py
 
-# Then, start the training loop
+## Then, start the training loop
 python scripts/train.py
 
 

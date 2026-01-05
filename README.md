@@ -68,11 +68,8 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 ## Day 5 - Friday Dec 12th, 2025
 **Transitioned to CIFAR-10 (Color Generation)**
 -updated U-Net channels from $1 \rightarrow 3$ to enable processing and generation of color images.Dataset 
-
 -Switch: Transitioned the data pipeline from MNIST ($28 \times 28$, grayscale) to CIFAR-10 ($32 \times 32$, color).
-
 -Training Initiated: Started a 50-epoch training run on CIFAR-10, targeting high-quality weight convergence.
-
 -Architectural Stability: Confirmed core diffusion logic is robust enough to handle the jump in complexity.
 
 ## Day 6 - Saturday Dec 13th, 2025
@@ -153,7 +150,7 @@ The "Final Sprint"
 — Reaching ConvergenceGoal: Hit a final loss below 0.01.Run: Initiated the final 200-epoch marathon training run on CelebA.Optimization: Reverted to a carefully tuned AdamW with a lower learning rate 2e-4 after the SGD tests proved the architecture was solid.Result: The model finally stabilized, hitting a "Golden Loss" of 0.0057.
 
 
-## Day 15 - Sunday Jan 4, 2026 (Today)
+## Day 15 - Sunday Jan 4, 2026 
 Asset Generation & Curation
 
 Milestone: Training completed.

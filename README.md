@@ -133,6 +133,16 @@ Optimizer Update: Switched to the AdamW optimizer for improved training stabilit
 - Continue to fix errrors and run facial generation again
 - Replaced AdamW with SGD for generation. Dumbing the generation model down hopefully won't damage the facial generations.
 
+## Day 12 - Monday Dec 22, 2025
+The "NaN" Crisis — Investigating Numerical Instability
 
-  
+Problem: Training on 64x64 faces led to "NaN" (Not a Number) loss values. The model would "explode," resulting in pure neon-yellow or static-filled generations.
+
+Debugging Phase: Traced the issue to gradient explosion in the deeper UNet blocks. The increased resolution (from 32x32 to 64x64) put more strain on the AdamW optimizer's momentum calculations.
+
+Fix: Implemented torch.nn.utils.clip_grad_norm_ to cap the gradients at 1.0, preventing individual weights from spiking and breaking the math.
+
+## Day 13 - Wednesday Dec 24, 2025
+Architecture Deep-Dive — Improving the BottleneckUpdate:
+Realized the model was losing too much detail at the $8 \times 8$ bottleneck.Code Change: Refined the unet.py to include 256-dimensional time embeddings (up from 128) to give the model more "brain power" to understand the noise level at higher resolutions.Stability Win: Switched the final generation scripts to use SGD with high momentum as a test. While slower, it proved that the "neon yellow" bug was an optimization artifact, not a data error.
 

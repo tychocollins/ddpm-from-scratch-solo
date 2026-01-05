@@ -144,7 +144,9 @@ Fix: Implemented torch.nn.utils.clip_grad_norm_ to cap the gradients at 1.0, pre
 
 ## Day 13 - Wednesday Dec 24, 2025
 Architecture Deep-Dive — Improving the BottleneckUpdate:
-Realized the model was losing too much detail at the $8 \times 8$ bottleneck.Code Change: Refined the unet.py to include 256-dimensional time embeddings (up from 128) to give the model more "brain power" to understand the noise level at higher resolutions.Stability Win: Switched the final generation scripts to use SGD with high momentum as a test. While slower, it proved that the "neon yellow" bug was an optimization artifact, not a data error.
+Realized the model was losing too much detail at the $8 \times 8$ bottleneck.Code 
+
+Change: Refined the unet.py to include 256-dimensional time embeddings (up from 128) to give the model more "brain power" to understand the noise level at higher resolutions.Stability Win: Switched the final generation scripts to use SGD with high momentum as a test. While slower, it proved that the "neon yellow" bug was an optimization artifact, not a data error.
 
 ## Day 14 - Thursday Jan 1, 2026
 The "Final Sprint"

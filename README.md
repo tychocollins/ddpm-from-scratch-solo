@@ -1,39 +1,39 @@
 # DDPM from Scratch – 100% Solo (Dec 2025 – Jan 2026)
 
+**Rebuild** | MNIST → CIFAR-10 → CelebA | Final Loss: **0.0057**
+
+## 🏆 The "Golden 5" (Final Results)
+
+<img width="160" height="160" alt="StockSample1" src="https://github.com/user-attachments/assets/49c4a8c6-2348-47c3-876b-bad80af7112a" />
+<img width="160" height="160" alt="Face3_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/72185de4-e8a0-4d83-99a1-b884671d52f0" />
+<img width="160" height="160" alt="Face2_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/442a5896-8e65-46d0-88cb-d30c612cbcea" />
+<img width="160" height="160" alt="StockSample3" src="https://github.com/user-attachments/assets/29c3ce70-4e46-47c8-b7f7-99184c291af4" />
+<img width="160" height="160" alt="Face1_upscayl_2x_remacri-4x" src="https://github.com/user-attachments/assets/d0f5095b-a046-4cfe-bf24-91800d91eb20" />
 
 
-<img width="170" height="170" alt="StockSample1" src="https://github.com/user-attachments/assets/49c4a8c6-2348-47c3-876b-bad80af7112a" />
-
-
-<img width="170" height="170" alt="Face3_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/72185de4-e8a0-4d83-99a1-b884671d52f0" />
-
-<img width="170" height="170" alt="Face2_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/442a5896-8e65-46d0-88cb-d30c612cbcea" />
-
-<img width="170" height="170" alt="StockSample3" src="https://github.com/user-attachments/assets/29c3ce70-4e46-47c8-b7f7-99184c291af4" />
-
-<img width="170" height="170" alt="Face1_upscayl_2x_remacri-4x" src="https://github.com/user-attachments/assets/d0f5095b-a046-4cfe-bf24-91800d91eb20" />
-
-
-
-
-🚀 The Result: Training Evolution (20 → 200 Epochs)
-
-
+## 🚀 Training Evolution (64x64 CelebA)
+| Epoch 20 | Epoch 50 | Epoch 100 | Epoch 200 (Final) |
+| :---: | :---: | :---: | :---: |
+| <img src="assets/progress/epoch_20.png" width="160" /> | <img src="assets/progress/epoch_50.png" width="160" /> | <img src="assets/progress/epoch_100.png" width="160" /> | <img src="assets/progress/epoch_200.png" width="160" /> |
+| *Initial skin tones* | *Structural symmetry* | *Feature sharpening* | **0.0057 Loss** |
 
 
 
+## ⚙️ Technical Specifications
 
+This implementation utilizes a high-performance, custom-built architecture designed for stability at higher resolutions (64x64).
 
-
-
-
-
-
-Goal: MNIST → CIFAR-10 → 64×64 faces.
-
-## Why this repo exists
-My senior design team used some AI assistance on our DDPM facial-generation project.  
-I will be learning how to compile DDPM from scratch
+| Component | Specification |
+| :--- | :--- |
+| **Model Architecture** | Deep Encoder-Decoder U-Net with Residual Skip Connections |
+| **Normalization** | Adaptive Group Normalization (AdaGroupNorm) - SD3/Flux standard |
+| **Conditioning** | Sinusoidal Time Embeddings (256-dim) with FiLM-style modulation |
+| **Noise Schedule** | Improved Cosine Schedule for better log-SNR distribution |
+| **Optimization** | AdamW with Weight Decay ($2 \times 10^{-4}$) + Gradient Clipping (1.0) |
+| **Stability Logic** | SGD Momentum warm-starts to mitigate "Neon Yellow" NaN artifacts |
+| **Refinement** | Exponential Moving Average (EMA) shadow weights for sampling |
+| **Hardware** | Metal Performance Shaders (MPS) on Apple Silicon M4 |
+| **Final Loss** | **0.0057** reached at 200 epochs |
 
 ## Timeline
 - Week 1 (Dec 9–15): Perfect MNIST digits  

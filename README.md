@@ -158,7 +158,9 @@ Asset Generation & Curation
 
 Milestone: Training completed.
 Execution: Ran generate_bulk.py to produce 100 sample faces.
+
 Outcome: Successfully curated the "Golden 5" assets—clear, recognizable human faces generated from 100% scratch-built code.
+
 Final Status: Project complete. 200 epochs reached. Loss: 0.0057.
 
 

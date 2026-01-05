@@ -87,7 +87,7 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 - Trained for 50 epochs with AdamW optimizer and lower learning rate  
 - Model is now fully general — works on any image size/channels
 
-  🛠️ Architectural Changes (The "How")
+   Architectural Changes (The "How")
   
 Color Conversion: Switched the U-Net model from 1 channel to 3 input/output channels (in_channels=3, out_channels=3) to handle real-world RGB photos (CIFAR-10).
 
@@ -158,9 +158,7 @@ Asset Generation & Curation
 
 Milestone: Training completed.
 Execution: Ran generate_bulk.py to produce 100 sample faces.
-
 Outcome: Successfully curated the "Golden 5" assets—clear, recognizable human faces generated from 100% scratch-built code.
-
 Final Status: Project complete. 200 epochs reached. Loss: 0.0057.
 
 

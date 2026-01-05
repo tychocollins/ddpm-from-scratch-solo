@@ -129,8 +129,11 @@ Optimizer Update: Switched to the AdamW optimizer for improved training stabilit
 
 - Created `generate_cifar.py` to sample from the trained color model  
 The Goal: Validate that the custom UNet could handle the transition from grayscale (1 channel) to RGB (3 channels).
+
 Observation: Generated samples showed correct color distributions and basic "blob" shapes matching CIFAR classes, but lacked high-fidelity object definition.
+
 The Pivot: Instead of spending a week tuning hyperparameters for $32 \times 32$ objects, I decided to leap directly into CelebA ($64 \times 64$).
+
 Rationale: I realized that facial symmetry (CelebA) would be a better test of my UNet's attention mechanisms than the low-resolution classes of CIFAR-10.
 
 ## Day 9 — Wednesday Dec 17, 2025

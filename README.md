@@ -42,7 +42,6 @@ This implementation utilizes a high-performance, custom-built architecture desig
 - Week 3–4 (Dec 23–Jan 9): 64×64 CelebA-HQ faces + Gradio demo
 
 Daily commits. 
-When I’m done, I’ll be able to whiteboard every equation and run live generation.
 
 ## Day 1 — Monday Dec 9   
 - Typed full `diffusion.py` + `train_mnist.py` myself in **under 2 hours**  

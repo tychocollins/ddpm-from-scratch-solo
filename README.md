@@ -87,8 +87,11 @@ Lesson: Realized that basic UNets without Attention or EMA struggle with sharp c
    Architectural Changes (The "How")
   
 Color Conversion: Switched the U-Net model from 1 channel to 3 input/output channels (in_channels=3, out_channels=3) to handle real-world RGB photos (CIFAR-10).
+
 Performance Fix 1: Cosine Noise Schedule: Implemented the superior Cosine Noise Schedule in diffusion.py. This is essential for effective noise parameterization and significantly improves the quality of the reverse diffusion process.
+
 Performance Fix 2: EMA Integration: Implemented the Exponential Moving Average (EMA) utility in train_cifar.py. The script now saves the stable EMA-averaged weights (trained_cifar_weights_ema.pt), which is critical for clean, artifact-free sampling.
+
 Optimizer Update: Switched to the AdamW optimizer for improved training stability and convergence speed.
 
 ## Day 8 — Tuesday Dec 16, 2025

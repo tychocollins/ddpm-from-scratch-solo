@@ -49,8 +49,9 @@ class GaussianDiffusion(nn.Module):
         variance = extract(self.posterior_variance, t, x.shape)
         return model_mean + torch.sqrt(variance) * torch.randn_like(x)
 
+    # --- THE FIX: This block must be indented inside the class ---
     @torch.no_grad()
-    def sample(self, batch_size=4, img_size=64):
+    def sample(self, model, batch_size=4, img_size=64):
         device = self.betas.device
         img = torch.randn((batch_size, 3, img_size, img_size), device=device)
         for i in reversed(range(0, self.timesteps)):

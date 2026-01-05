@@ -2,17 +2,23 @@ import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
-from diffusion import GaussianDiffusion
-from unet import UNet
 import os
+import sys
+
+# --- FOLDER STRUCTURE FIX ---
+# This tells Python to look one directory up to find the 'core' folder
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from core.diffusion import Diffusion
+from core.unet import UNet
 
 # --- CONFIGURATION ---
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 BATCH_SIZE = 32
 LR = 2e-4
-START_EPOCH = 1      # Default start
-MAX_EPOCHS = 200     # New target
-SAVE_PATH = "high_cap_celeba.pt"
+START_EPOCH = 1      
+MAX_EPOCHS = 200     
+SAVE_PATH = "../high_cap_celeba.pt" # Saves in root folder
 
 # --- DATA SETUP ---
 transform = transforms.Compose([
@@ -22,12 +28,13 @@ transform = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
+# Ensure root points to where your CelebA data actually is
 dataset = datasets.ImageFolder(root="../data", transform=transform)
 loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
 # --- MODEL & OPTIMIZER ---
 model = UNet().to(DEVICE)
-diffusion = GaussianDiffusion(model).to(DEVICE)
+diffusion = Diffusion(model).to(DEVICE)
 optimizer = optim.AdamW(model.parameters(), lr=LR)
 
 # --- RESUME LOGIC ---
@@ -35,17 +42,15 @@ if os.path.exists(SAVE_PATH):
     print(f"📦 Found existing checkpoint: {SAVE_PATH}")
     checkpoint = torch.load(SAVE_PATH, map_location=DEVICE)
     
-    # Check if this is a "full" checkpoint or just weights
     if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         START_EPOCH = checkpoint['epoch'] + 1
         print(f"✅ Full state loaded. Resuming from Epoch {START_EPOCH}")
     else:
-        # Fallback for your old file which only saved weights
         model.load_state_dict(checkpoint)
-        START_EPOCH = 101 # Since you know you finished 100
-        print(f"⚠️ Only weights found. Resuming from Epoch {START_EPOCH} (Optimizer reset)")
+        START_EPOCH = 101 
+        print(f"⚠️ Only weights found. Resuming from Epoch {START_EPOCH}")
 
 # --- TRAINING LOOP ---
 print(f"🚀 Training on {DEVICE}. Target: {MAX_EPOCHS} Epochs...")
@@ -60,7 +65,10 @@ for epoch in range(START_EPOCH, MAX_EPOCHS + 1):
         
         optimizer.zero_grad()
         loss.backward()
+        
+        # Critical for CelebA stability
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        
         optimizer.step()
         
         if i % 50 == 0: 

@@ -1,53 +1,72 @@
 import torch
 import gradio as gr
-from diffusion import GaussianDiffusion
-from unet import UNet
+import os
+import sys
+import numpy as np
 
-DEVICE = "cpu" # Stay on CPU for app stability while training on GPU
+# No sys.path.append needed here because app.py is in the root 
+# and can see the 'core' folder directly.
+from core.diffusion import GaussianDiffusion
+from core.unet import UNet
+
+DEVICE = "cpu" # Stay on CPU for app stability to keep GPU free for training
 WEIGHTS_PATH = "high_cap_celeba.pt"
 
-# Initialize Model
+# --- INITIALIZE MODEL ---
 model = UNet().to(DEVICE)
 
-# --- NEW LOADING LOGIC ---
+# --- ROBUST LOADING LOGIC ---
 try:
-    checkpoint = torch.load(WEIGHTS_PATH, map_location=DEVICE)
-    
-    # Check if we saved a full checkpoint dictionary or just the weights
-    if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
-        model.load_state_dict(checkpoint['model_state_dict'])
-        epoch = checkpoint.get('epoch', 'Unknown')
-        print(f"✅ High-Capacity Weights Loaded! (From Epoch {epoch})")
-    else:
-        model.load_state_dict(checkpoint)
-        print("✅ Weights Loaded (Standard format)")
+    if os.path.exists(WEIGHTS_PATH):
+        checkpoint = torch.load(WEIGHTS_PATH, map_location=DEVICE)
         
-    model.eval()
+        # Check if we saved a full checkpoint dictionary or just the weights
+        if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
+            model.load_state_dict(checkpoint['model_state_dict'])
+            epoch = checkpoint.get('epoch', 'Unknown')
+            print(f"✅ High-Capacity Weights Loaded! (From Epoch {epoch})")
+        else:
+            model.load_state_dict(checkpoint)
+            print("✅ Weights Loaded (Standard format)")
+            
+        model.eval()
+    else:
+        print(f"⚠️ Warning: {WEIGHTS_PATH} not found. App will run with random weights.")
 except Exception as e:
-    print(f"⚠️ Could not load weights: {e}")
-# -------------------------
+    print(f"❌ Could not load weights: {e}")
 
+# Initialize the diffusion engine with the model
 diffusion = GaussianDiffusion(model).to(DEVICE)
 
 def generate(num_images, steps):
+    """
+    Gradio wrapper to generate images and format them for the web gallery.
+    """
     # Ensure the diffusion object uses the requested number of steps
-    # Note: Ensure your GaussianDiffusion class handles this dynamic change
-    diffusion.timesteps = int(steps)
+    # Note: Your Diffusion class must support setting timesteps dynamically
+    try:
+        diffusion.num_steps = int(steps)
+    except AttributeError:
+        pass # Fallback if steps are hardcoded in your class
     
-    # Generate samples
+    # Generate samples using your Diffusion.sample method
     with torch.no_grad():
-        samples = diffusion.sample(batch_size=int(num_images)).cpu()
+        # Using n=num_images to match the logic used in your scripts
+        samples = diffusion.sample(model, int(num_images))
     
     processed = []
     for img in samples:
-        # CELEBA SYNC: Map [-1, 1] back to [0, 1]
+        # CELEBA SYNC: Map [-1, 1] back to [0, 1] for display
         img = (img + 1.0) / 2.0 
         img = torch.clamp(img, 0, 1)
-        # Permute from (C, H, W) to (H, W, C) for Gradio
-        processed.append(img.permute(1, 2, 0).numpy())
+        
+        # Move to CPU and permute from (C, H, W) to (H, W, C) for Gradio/NumPy
+        img_np = img.cpu().permute(1, 2, 0).numpy()
+        processed.append(img_np)
+        
     return processed
 
-# Define sliders
+# --- GRADIO INTERFACE ---
 inputs = [
     gr.Slider(minimum=1, maximum=4, value=2, step=1, label="Number of Images"),
     gr.Slider(minimum=100, maximum=1000, value=1000, step=100, label="Diffusion Steps")
@@ -56,9 +75,10 @@ inputs = [
 demo = gr.Interface(
     fn=generate, 
     inputs=inputs, 
-    outputs=gr.Gallery(label="Generated Faces"),
-    title="CelebA High-Cap Generator",
-    description="Optimized for M4 training. Higher steps yield clearer results."
+    outputs=gr.Gallery(label="Generated Faces", columns=2, height="auto"),
+    title="CelebA High-Cap Face Generator",
+    description="A 100% scratch-built DDPM. Higher steps yield clearer facial features. Trained on M4."
 )
 
-demo.launch()
+if __name__ == "__main__":
+    demo.launch()

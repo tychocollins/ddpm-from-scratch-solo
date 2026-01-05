@@ -73,25 +73,23 @@ Checkpoint Creation: Integrated checkpoint saving into train_mnist.py, creating 
 -Architectural Stability: Confirmed core diffusion logic is robust enough to handle the jump in complexity.
 
 ## Day 6 - Saturday Dec 13th, 2025
-**Perfecting MNIST Digits (Already Done)**
+Status: First MNIST samples generated.
+Observation: Results showed a "blue/gray blur." The model captured the center-mass of the digits but lacked edge definition.
+Lesson: Realized that basic UNets without Attention or EMA struggle with sharp convergence. This was the catalyst for upgrading the architecture for the CIFAR and CelebA stages.
 
 ## Day 7 — Monday Dec 15, 2025
 
 **Switched to color images (CIFAR-10) — my DDPM now handles real-world RGB photos**
 
 - Updated U-Net to 3 input/output channels for RGB color  
-- Switched dataset from MNIST to CIFAR-10 (32×32 cars, dogs, planes, etc.)  
 - Trained for 50 epochs with AdamW optimizer and lower learning rate  
 - Model is now fully general — works on any image size/channels
 
    Architectural Changes (The "How")
   
 Color Conversion: Switched the U-Net model from 1 channel to 3 input/output channels (in_channels=3, out_channels=3) to handle real-world RGB photos (CIFAR-10).
-
 Performance Fix 1: Cosine Noise Schedule: Implemented the superior Cosine Noise Schedule in diffusion.py. This is essential for effective noise parameterization and significantly improves the quality of the reverse diffusion process.
-
 Performance Fix 2: EMA Integration: Implemented the Exponential Moving Average (EMA) utility in train_cifar.py. The script now saves the stable EMA-averaged weights (trained_cifar_weights_ema.pt), which is critical for clean, artifact-free sampling.
-
 Optimizer Update: Switched to the AdamW optimizer for improved training stability and convergence speed.
 
 ## Day 8 — Tuesday Dec 16, 2025
@@ -99,10 +97,10 @@ Optimizer Update: Switched to the AdamW optimizer for improved training stabilit
 **Generated my first real color images from pure static — DDPM now handles RGB photos**
 
 - Created `generate_cifar.py` to sample from the trained color model  
-- Started with pure random noise (`torch.randn`) → ran 1000 reverse steps → real cars, dogs, planes appeared  
-- Trained on CIFAR-10 (32×32 color) → loss reached **0.03** after 20 epochs  
-- Results: clear color images forming (perfect for this stage)
-
+The Goal: Validate that the custom UNet could handle the transition from grayscale (1 channel) to RGB (3 channels).
+Observation: Generated samples showed correct color distributions and basic "blob" shapes matching CIFAR classes, but lacked high-fidelity object definition.
+The Pivot: Instead of spending a week tuning hyperparameters for $32 \times 32$ objects, I decided to leap directly into CelebA ($64 \times 64$).
+Rationale: I realized that facial symmetry (CelebA) would be a better test of my UNet's attention mechanisms than the low-resolution classes of CIFAR-10.
 
 ## Day 9 — Wednesday Dec 17, 2025
 

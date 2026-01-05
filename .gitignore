@@ -45,3 +45,7 @@ runs/
 .vscode/
 .idea/
 .ipynb_checkpoints/
+
+
+echo ".DS_Store" >> .gitignore
+

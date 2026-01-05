@@ -1,5 +1,23 @@
 # DDPM from Scratch – 100% Solo (Dec 2025 – Jan 2026)
 
+
+![Uploading StockSample1.png…]() 
+
+
+
+🚀 The Result: Training Evolution (20 → 200 Epochs)
+
+
+
+
+
+
+
+
+
+
+
+
 Goal: MNIST → CIFAR-10 → 64×64 faces.
 
 ## Why this repo exists

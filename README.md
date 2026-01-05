@@ -1,7 +1,6 @@
 # DDPM from Scratch – 100% Solo (Dec 2025 – Jan 2026)
 
-Former pro soccer player rebuilding diffusion from the ground up so every word on my resume is true.  
-Goal: MNIST → CIFAR-10 → 64×64 faces with zero AI code generation.
+Goal: MNIST → CIFAR-10 → 64×64 faces.
 
 ## Why this repo exists
 My senior design team used some AI assistance on our DDPM facial-generation project.  

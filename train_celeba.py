@@ -1,55 +1,56 @@
-import os
 import torch
+import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 from diffusion import GaussianDiffusion
 from unet import UNet
+import os
 
-# --- CONFIGURATION (ROCK-SOLID STABILITY) ---
+# --- CONFIGURATION ---
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
-BATCH_SIZE = 16        # Keeping it low to manage heat on M4 Air
-LR = 1e-4              # SGD requires a slightly higher LR than AdamW
-MOMENTUM = 0.9         # Standard momentum for SGD stability
-WEIGHT_DECAY = 1e-2    
-MAX_NORM = 0.1         # Strict safety fuse
-EPOCHS = 200
-SAVE_PATH = "trained_celeba_weights_ema.pt"
-DATA_ROOT = "../data"
+BATCH_SIZE = 32
+LR = 2e-4
+START_EPOCH = 1      # Default start
+MAX_EPOCHS = 200     # New target
+SAVE_PATH = "high_cap_celeba.pt"
 
-# 1. DATASET
+# --- DATA SETUP ---
 transform = transforms.Compose([
     transforms.Resize((64, 64)),
+    transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-try:
-    dataset = datasets.ImageFolder(root=DATA_ROOT, transform=transform)
-    loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
-    print(f"✅ Dataset loaded. Found {len(dataset)} images.")
-except Exception as e:
-    print(f"❌ Dataset Error: {e}")
-    exit()
+dataset = datasets.ImageFolder(root="../data", transform=transform)
+loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-# 2. MODEL & DIFFUSION
-model = UNet(in_channels=3, out_channels=3, time_embed_dim=256).to(DEVICE)
-diffusion = GaussianDiffusion(model, timesteps=1000, time_emb_dim=256).to(DEVICE)
+# --- MODEL & OPTIMIZER ---
+model = UNet().to(DEVICE)
+diffusion = GaussianDiffusion(model).to(DEVICE)
+optimizer = optim.AdamW(model.parameters(), lr=LR)
 
-# --- THE BIG CHANGE: SWITCHING TO SGD ---
-# SGD is more mathematically "stable" for hot hardware
-optimizer = torch.optim.SGD(model.parameters(), lr=LR, momentum=MOMENTUM, weight_decay=WEIGHT_DECAY)
+# --- RESUME LOGIC ---
+if os.path.exists(SAVE_PATH):
+    print(f"📦 Found existing checkpoint: {SAVE_PATH}")
+    checkpoint = torch.load(SAVE_PATH, map_location=DEVICE)
+    
+    # Check if this is a "full" checkpoint or just weights
+    if isinstance(checkpoint, dict) and 'model_state_dict' in checkpoint:
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        START_EPOCH = checkpoint['epoch'] + 1
+        print(f"✅ Full state loaded. Resuming from Epoch {START_EPOCH}")
+    else:
+        # Fallback for your old file which only saved weights
+        model.load_state_dict(checkpoint)
+        START_EPOCH = 101 # Since you know you finished 100
+        print(f"⚠️ Only weights found. Resuming from Epoch {START_EPOCH} (Optimizer reset)")
 
-# EMA Model
-ema_model = UNet(in_channels=3, out_channels=3, time_embed_dim=256).to(DEVICE)
-ema_model.load_state_dict(model.state_dict())
+# --- TRAINING LOOP ---
+print(f"🚀 Training on {DEVICE}. Target: {MAX_EPOCHS} Epochs...")
 
-# 3. START LOGIC
-print("🆕 Starting fresh rebuild. No old weights loaded.")
-
-# 4. TRAINING LOOP
-print(f"🚀 Training started on {DEVICE} with SGD stability.")
-
-for epoch in range(0, EPOCHS + 1):
+for epoch in range(START_EPOCH, MAX_EPOCHS + 1):
     model.train()
     for i, (x, _) in enumerate(loader):
         x = x.to(DEVICE)
@@ -57,28 +58,19 @@ for epoch in range(0, EPOCHS + 1):
         
         loss = diffusion.p_losses(x, t)
         
-        if torch.isnan(loss):
-            print(f"❌ NaN detected at Epoch {epoch}. Cooling required.")
-            exit()
-
         optimizer.zero_grad()
         loss.backward()
-        
-        # Gradient Clipping
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=MAX_NORM)
-        
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
         
-        with torch.no_grad():
-            for p, ema_p in zip(model.parameters(), ema_model.parameters()):
-                ema_p.mul_(0.999).add_(p, alpha=0.001)
-        
-        if i % 100 == 0:
-            print(f"Epoch {epoch} | Batch {i} | Loss: {loss.item():.4f}")
-
-    # SAVE LOGIC
-    torch.save(ema_model.state_dict(), SAVE_PATH)
-    if epoch % 5 == 0:
-        torch.save(ema_model.state_dict(), f"celeba_checkpoint_e{epoch}.pt")
-
-print("✅ Training Complete!")
+        if i % 50 == 0: 
+            print(f"Epoch {epoch}/{MAX_EPOCHS} | Batch {i} | Loss: {loss.item():.4f}")
+    
+    # Save a 'Full' checkpoint after every epoch
+    torch.save({
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'loss': loss.item(),
+    }, SAVE_PATH)
+    print(f"💾 Checkpoint saved at end of Epoch {epoch}")

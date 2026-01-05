@@ -1,6 +1,7 @@
 # DDPM from Scratch – 100% Solo (Dec 2025 – Jan 2026)
 
-🚀 Project Overview
+## 🚀 Project Overview 
+
 This repository features a from-scratch implementation of a Denoising Diffusion Probabilistic Model (DDPM) optimized for high-capacity generation on Apple Silicon (M4). By modularizing the architecture into a dedicated core engine and scripts execution layer, the project demonstrates a professional-grade approach to deep learning software design and CelebA dataset scaling. The result is a fully functional, stable diffusion pipeline capable of generating 64x64 facial features via a custom Gradio-powered inference interface.
 
 ## 🏆 The "Golden 5" (Final Results)

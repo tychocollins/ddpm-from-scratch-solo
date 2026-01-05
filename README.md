@@ -11,7 +11,7 @@
 
 <img width="192" height="192" alt="StockSample3" src="https://github.com/user-attachments/assets/29c3ce70-4e46-47c8-b7f7-99184c291af4" />
 
-<img width="128" height="128" alt="Face1_upscayl_2x_remacri-4x" src="https://github.com/user-attachments/assets/d0f5095b-a046-4cfe-bf24-91800d91eb20" />
+<img width="192" height="192" alt="Face1_upscayl_2x_remacri-4x" src="https://github.com/user-attachments/assets/d0f5095b-a046-4cfe-bf24-91800d91eb20" />
 
 
 

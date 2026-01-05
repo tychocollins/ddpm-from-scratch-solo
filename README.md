@@ -195,53 +195,23 @@ Final Status: Project complete. 200 epochs reached. Loss: 0.0057.
 
 ## 🛠️ How to Use
 
-### 1. Setup Environment
-Clone the repository and install the required dependencies:
+### 1. Clone the repository:
+```bash
 git clone [https://github.com/tychocollins/ddpm-from-scratch-solo.git](https://github.com/tychocollins/ddpm-from-scratch-solo.git)
-
 cd ddpm-from-scratch-solo
+
+conda create -n pytorch_env python=3.11
+conda activate pytorch_env
+
 pip install -r requirements.txt
 
-### 2. Run the Interactive App
-Launch the Gradio interface to generate faces using the pre-trained Epoch 200 weights:
 python app.py
 
-### 3. Bulk Generation
-To generate a large batch of images for evaluation, use the specialized script:
 python scripts/generate_bulk.py
 
-### 4. Training (Optional)
-If you wish to re-train or fine-tune the model on the CelebA dataset:
-
-### First, download the dataset
+# First, download the CelebA images
 python scripts/downloader.py
 
-### Then, start the training loop
+# Then, initiate the training loop
 python scripts/train.py
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone  [https://github.com/tychocollins/ddpm-from-scratch-solo.git](https://github.com/tychocollins/ddpm-from-scratch-solo.git)
-
-    ```
-
-2.  **Create and activate the environment:**
-    ```bash
-    conda create -n pytorch_env python=3.11
-    conda activate pytorch_env
-    ```
-
-3.  **Install dependencies:**
-    ```bash
-    cd ddpm-from-scratch-solo
-    pip install -r requirements.txt
-    ```
-
-### Run the Interactive App
-
-Launch the Gradio interface to generate faces using the pre-trained Epoch 200 weights:
-python app.py
-
 

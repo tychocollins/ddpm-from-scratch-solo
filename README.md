@@ -199,19 +199,33 @@ Final Status: Project complete. 200 epochs reached. Loss: 0.0057.
 ```bash
 git clone [https://github.com/tychocollins/ddpm-from-scratch-solo.git](https://github.com/tychocollins/ddpm-from-scratch-solo.git)
 cd ddpm-from-scratch-solo
-
+```
+### 2. Create and Activate Environment
+```bash
 conda create -n pytorch_env python=3.11
 conda activate pytorch_env
+```
 
+### 3. Install Dependencies
+```bash
 pip install -r requirements.txt
-
+```
+### 4. Launch the Interactive App
+```bash
 python app.py
-
+```
+### 5.Perform Bulk Generation
+```bash
 python scripts/generate_bulk.py
-
+```
+### 6. Re-train or Fine-tune
+```bash
 # First, download the CelebA images
 python scripts/downloader.py
 
 # Then, initiate the training loop
 python scripts/train.py
+```
+
+
 

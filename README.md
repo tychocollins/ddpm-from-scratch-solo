@@ -10,10 +10,8 @@
 
 <div align="center">
 
-# **🚀 TRY IT LIVE 🚀**
-
 <a href="https://huggingface.co/spaces/tychocollins7/ddpm-face-generator">
-  <img src="https://img.shields.io/badge/CLICK_HERE-OPEN_LIVE_DEMO-FF6B35?style=for-the-badge&logoColor=white&labelColor=000000" alt="LIVE DEMO" height="60"/>
+  <img src="https://img.shields.io/badge/🚀%20CLICK%20HERE-OPEN%20LIVE%20DEMO-FF6B35?style=for-the-badge&logoColor=white&labelColor=000000" alt="LIVE DEMO" height="80"/>
 </a>
 
 **Generate faces in real-time • 64×64 resolution • 1000-step diffusion**

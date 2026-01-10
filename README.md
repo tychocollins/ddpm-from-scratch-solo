@@ -6,6 +6,7 @@
 
 > Professional-grade Denoising Diffusion Probabilistic Model achieving **0.0057 loss** on 64×64 facial generation. Built entirely from research papers—no tutorials, just PyTorch and debugging.
 
+
 ![Demo1](https://github.com/user-attachments/assets/3d7f3ace-d235-45cd-82dc-eb8b01b36b39)
 
 

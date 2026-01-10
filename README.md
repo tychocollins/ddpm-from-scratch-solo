@@ -12,8 +12,6 @@
 
 *Generate realistic 64×64 faces from pure random noise through 1000-step reverse diffusion*
 
-![Demo Screenshot](assets/demo-screenshot.png)
-
 <p align="center">
   <img src="assets/progress/Demo.gif" width="600" title="DDPM CelebA Demo">
 </p>

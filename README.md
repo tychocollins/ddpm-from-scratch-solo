@@ -6,14 +6,14 @@
 
 > Professional-grade Denoising Diffusion Probabilistic Model achieving **0.0057 loss** on 64×64 facial generation. Built entirely from research papers—no tutorials, just PyTorch and debugging.
 
+## 🎬 Live Demo
+
+**[→ Try it yourself on Hugging Face Spaces](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)** ← Generate faces in real-time!
 
 <p align="center">
   <img src="assets/progress/Demo.gif" width="600" title="DDPM CelebA Demo">
 </p>
 
-## 🎬 Live Demo
-
-**[→ Try it yourself on Hugging Face Spaces](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)** ← Generate faces in real-time!
 
 
 

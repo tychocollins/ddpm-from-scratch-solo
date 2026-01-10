@@ -8,7 +8,15 @@
 
 ## 🎬 Live Demo
 
-**[→ Try it yourself on Hugging Face Spaces](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)** ← Generate faces in real-time!
+<div align="center">
+  
+### **[🚀 Try it yourself on Hugging Face Spaces](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)**
+
+![Live Demo](assets/demo.gif)
+
+*Generate realistic 64×64 faces from pure random noise through 1000-step reverse diffusion*
+
+</div>
 
 <p align="center">
   <img src="assets/progress/Demo.gif" width="600" title="DDPM CelebA Demo">

@@ -10,13 +10,10 @@
 
 ## 🏆 The "Golden 5" (Final Results)
 
-<img width="150" height="150" alt="StockSample1" src="https://github.com/user-attachments/assets/49c4a8c6-2348-47c3-876b-bad80af7112a" />&nbsp;
-<img width="150" height="150" alt="Face3_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/72185de4-e8a0-4d83-99a1-b884671d52f0" />&nbsp;
-<img width="150" height="150" alt="Face2_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/442a5896-8e65-46d0-88cb-d30c612cbcea" />&nbsp;
-<img width="150" height="150" alt="StockSample3" src="https://github.com/user-attachments/assets/29c3ce70-4e46-47c8-b7f7-99184c291af4" />&nbsp;
-<img width="150" height="150" alt="Face1_upscayl_2x_remacri-4x" src="https://github.com/user-attachments/assets/d0f5095b-a046-4cfe-bf24-91800d91eb20" />
+<img width="160" height="160" alt="StockSample1" src="https://github.com/user-attachments/assets/49c4a8c6-2348-47c3-876b-bad80af7112a" /> <img width="160" height="160" alt="Face3_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/72185de4-e8a0-4d83-99a1-b884671d52f0" /> <img width="160" height="160" alt="Face2_upscayl_3x_remacri-4x" src="https://github.com/user-attachments/assets/442a5896-8e65-46d0-88cb-d30c612cbcea" /> <img width="160" height="160" alt="StockSample3" src="https://github.com/user-attachments/assets/29c3ce70-4e46-47c8-b7f7-99184c291af4" /> <img width="160" height="160" alt="Face1_upscayl_2x_remacri-4x" src="https://github.com/user-attachments/assets/d0f5095b-a046-4cfe-bf24-91800d91eb20" />
 
-<br><br>
+<br>
+
 ## 🎬 Live Demo
 
 <a href="https://huggingface.co/spaces/tychocollins7/ddpm-face-generator">
@@ -24,6 +21,7 @@
        alt="Live Demo" 
        width="200" />
 </a>
+
 <br>
 
 **Generate faces in real-time • 64×64 resolution • 1000-step diffusion**

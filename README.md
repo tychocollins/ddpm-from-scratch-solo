@@ -243,6 +243,39 @@ python scripts/downloader.py
 # Then, initiate the training loop
 python scripts/train.py
 ```
+---
 
+## 📚 References
+
+- [Ho et al. (2020) - Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239)
+- [Nichol & Dhariwal (2021) - Improved DDPM](https://arxiv.org/abs/2102.09672)
+- [Song et al. (2021) - Score-Based Models](https://arxiv.org/abs/2011.13456)
+
+**Note:** Implemented entirely from papers—no existing codebases or tutorials used.
+
+---
+
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) for details
+
+---
+
+## 🤝 Contact
+
+**Tycho Collins**  
+📧 collinstycho@gmail.com  
+🔗 [GitHub](https://github.com/tychocollins) | [LinkedIn](https://linkedin.com/in/tycho-collins-957998200)
+
+*Built while playing professional soccer for Memphis 901 FC (USL Championship) and NK Rudar Velenje (Slovenia) 🏆⚽*
+
+---
+
+## ⭐ Star History
+
+If you found this helpful, consider giving it a star! It helps others discover the project.
+```
+
+---
 
 

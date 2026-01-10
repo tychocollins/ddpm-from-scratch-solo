@@ -10,13 +10,15 @@
 
 <div align="center">
 
-# 🚀 **[CLICK HERE TO OPEN LIVE DEMO](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)**
+# **🚀 TRY IT LIVE 🚀**
 
-### *Generate realistic 64×64 faces in real-time!*
+<a href="https://huggingface.co/spaces/tychocollins7/ddpm-face-generator">
+  <img src="https://img.shields.io/badge/CLICK_HERE-OPEN_LIVE_DEMO-FF6B35?style=for-the-badge&logoColor=white&labelColor=000000" alt="LIVE DEMO" height="60"/>
+</a>
+
+**Generate faces in real-time • 64×64 resolution • 1000-step diffusion**
 
 </div>
-
-*Pure random noise → 1000-step reverse diffusion → realistic faces*
 
 <p align="center">
   <img src="assets/progress/Demo.gif" width="600" title="DDPM CelebA Demo">

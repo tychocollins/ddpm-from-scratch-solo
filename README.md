@@ -8,9 +8,8 @@
 
 
 <p align="center">
-  <img src="assets/Demo.gif" width="800" title="Gradio Inference Demo">
+  <img src="assets/Demo.gif" width="800" title="DDPM CelebA Demo">
 </p>
-
 
 ## 🏆 The "Golden 5" (Final Results)
 

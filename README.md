@@ -4,6 +4,15 @@
 
 This repository features a from-scratch implementation of a Denoising Diffusion Probabilistic Model (DDPM) optimized for high-capacity generation on Apple Silicon (M4). By modularizing the architecture into a dedicated core engine and scripts execution layer, the project demonstrates a professional-grade approach to deep learning software design and CelebA dataset scaling. The result is a fully functional, stable diffusion pipeline capable of generating 64x64 facial features via a custom Gradio-powered inference interface.
 
+
+
+## 🎬 Live Demo
+
+
+https://github.com/user-attachments/assets/bb5f4aee-7ae1-4b42-ad2d-9b29fd42008c
+
+
+
 ## 🏆 The "Golden 5" (Final Results)
 
 <img width="160" height="160" alt="StockSample1" src="https://github.com/user-attachments/assets/49c4a8c6-2348-47c3-876b-bad80af7112a" />

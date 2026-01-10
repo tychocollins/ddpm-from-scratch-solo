@@ -1,20 +1,12 @@
 # DDPM from Scratch – 100% Solo (Dec 2025 – Jan 2026)
 
-## 🚀 Project Overview 
-
-This repository features a from-scratch implementation of a Denoising Diffusion Probabilistic Model (DDPM) optimized for high-capacity generation on Apple Silicon (M4). By modularizing the architecture into a dedicated core engine and scripts execution layer, the project demonstrates a professional-grade approach to deep learning software design and CelebA dataset scaling. The result is a fully functional, stable diffusion pipeline capable of generating 64x64 facial features via a custom Gradio-powered inference interface.
-
-
-![Demo1](https://github.com/user-attachments/assets/3d7f3ace-d235-45cd-82dc-eb8b01b36b39)
-
-
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 
 ## 🎬 Live Demo 
 
-
-
-
+![Demo1](https://github.com/user-attachments/assets/3d7f3ace-d235-45cd-82dc-eb8b01b36b39)
 
 
 ## 🏆 The "Golden 5" (Final Results)
@@ -34,6 +26,16 @@ This repository features a from-scratch implementation of a Denoising Diffusion 
 
 
 
+## 🚀 Project Overview
+
+This repository features a **from-scratch implementation** of a Denoising Diffusion Probabilistic Model (DDPM) optimized for high-capacity generation on Apple Silicon (M4). 
+
+**Key Achievements:**
+- ✅ Built entire pipeline from research papers (Ho et al. 2020, Nichol & Dhariwal 2021)
+- ✅ Achieved **0.0057 final loss** on CelebA (comparable to published benchmarks)
+- ✅ Implemented modern techniques: AdaGroupNorm (SD3/Flux), cosine schedules, EMA
+- ✅ Debugged gradient explosion, NaN artifacts, and numerical instability
+- ✅ Deployed interactive Gradio interface for real-time generation
 
 ## ⚙️ Technical Specifications
 

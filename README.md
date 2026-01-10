@@ -8,13 +8,13 @@
 
 ## 🎬 Live Demo
 
-> # 🚀 **[CLICK HERE TO OPEN LIVE DEMO](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)**
-> 
-> ### Generate realistic 64×64 faces in real-time!
-> 
-> *No setup required • Runs in your browser • Free to use*
+<div align="center">
 
-*Transform pure random noise into realistic faces through 1000-step reverse diffusion*
+[![LIVE DEMO](https://img.shields.io/badge/🚀_CLICK_HERE-OPEN_LIVE_DEMO-orange?style=for-the-badge&logoColor=white)](https://huggingface.co/spaces/tychocollins7/ddpm-face-generator)
+
+**Generate faces in real-time • 64×64 resolution • 1000-step diffusion**
+
+</div>
 
 <p align="center">
   <img src="assets/progress/Demo.gif" width="600" title="DDPM CelebA Demo">

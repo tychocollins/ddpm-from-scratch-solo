@@ -7,7 +7,9 @@
 > Professional-grade Denoising Diffusion Probabilistic Model achieving **0.0057 loss** on 64×64 facial generation. Built entirely from research papers—no tutorials, just PyTorch and debugging.
 
 
-<img src="Demo.gif" width="600">
+<p align="center">
+  <img src="assets/Demo.gif" width="800" title="Gradio Inference Demo">
+</p>
 
 
 ## 🏆 The "Golden 5" (Final Results)

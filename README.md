@@ -4,6 +4,8 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 
+> Professional-grade Denoising Diffusion Probabilistic Model achieving **0.0057 loss** on 64×64 facial generation. Built entirely from research papers—no tutorials, just PyTorch and debugging.
+
 ## 🎬 Live Demo 
 
 ![Demo1](https://github.com/user-attachments/assets/3d7f3ace-d235-45cd-82dc-eb8b01b36b39)

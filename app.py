@@ -4,10 +4,6 @@ import os
 import sys
 import numpy as np
 from huggingface_hub import hf_hub_download
-
-
-# No sys.path.append needed here because app.py is in the root 
-# and can see the 'core' folder directly.
 from core.diffusion import GaussianDiffusion
 from core.unet import UNet
 
@@ -15,22 +11,19 @@ DEVICE = "cpu" # Stay on CPU for app stability to keep GPU free for training
 WEIGHTS_PATH = "high_cap_celeba.pt"
 REPO_ID = "tychocollins7/ddpm-face-generator"
 
-# --- AUTO-DOWNLOAD SECTION (Place it here!) ---
+# --- AUTO-DOWNLOAD SECTION ---
 if not os.path.exists(WEIGHTS_PATH):
-    print(f"📥 {WEIGHTS_PATH} not found locally. Downloading from Hugging Face...")
+    print(f"📥 {WEIGHTS_PATH} not found locally. Downloading...")
     try:
         hf_hub_download(
-            repo_id=REPO_ID, 
-            filename=WEIGHTS_PATH, 
-            local_dir="."
+            repo_id="tychocollins7/ddpm-face-generator", 
+            filename="high_cap_celeba.pt", 
+            local_dir=".",
+            repo_type="space"  # <--- CRITICAL: Tells HF to look in your Space files
         )
         print("✅ Download complete.")
     except Exception as e:
         print(f"❌ Download failed: {e}")
-
-
-
-
 
 # --- INITIALIZE MODEL ---
 model = UNet().to(DEVICE)

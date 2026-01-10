@@ -16,7 +16,7 @@
 ## 🎬 Live Demo
 
 <a href="https://huggingface.co/spaces/tychocollins7/ddpm-face-generator">
-  <img src="https://img.shields.io/badge/🚀%20CLICK%20HERE-OPEN%20LIVE%20DEMO-FF6B35?style=for-the-badge&logoColor=white&labelColor=000000" alt="LIVE DEMO" width="200"/>
+  <img src="https://img.shields.io/badge/🚀%20CLICK%20HERE-OPEN%20LIVE%20DEMO-FF6B35?style=for-the-badge&logoColor=white&labelColor=000000" alt="LIVE DEMO" width="350"/>
 </a>
 
 <br>

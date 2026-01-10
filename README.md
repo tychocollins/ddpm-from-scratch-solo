@@ -8,7 +8,7 @@
 
 
 <p align="center">
-  <img src="assets/Demo.gif" width="800" title="DDPM CelebA Demo">
+  <img src="desktop/Demo.gif" width="800" title="DDPM CelebA Demo">
 </p>
 
 ## 🏆 The "Golden 5" (Final Results)

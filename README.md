@@ -267,7 +267,6 @@ MIT License - See [LICENSE](LICENSE) for details
 📧 collinstycho@gmail.com  
 🔗 [GitHub](https://github.com/tychocollins) | [LinkedIn](https://linkedin.com/in/tycho-collins-957998200)
 
-*Built while playing professional soccer for Memphis 901 FC (USL Championship) and NK Rudar Velenje (Slovenia) 🏆⚽*
 
 ---
 
